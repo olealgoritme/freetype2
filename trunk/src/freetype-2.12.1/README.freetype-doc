@@ -1,0 +1,18 @@
+This bundle contains additional documentation files for FreeType.  However,
+it does *not* contain the API reference, which is part of the FreeType
+source code bundle.
+
+To properly install the documentation files, unpack both the source and the
+doc bundle in the same place, e.g.
+
+  mkdir src
+  cd src
+  tar xzvf freetype-2.12.1.tar.gz
+  tar xzvf freetype-doc-2.12.1.tar.gz
+
+Now you can move the `docs' subdirectory of `freetype-2.12.1' to any place
+you want.
+
+The entry point for the documentation is
+
+  docs/index.html

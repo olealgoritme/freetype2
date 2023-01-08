@@ -1,0 +1,66 @@
+This package contains example programs for the FreeType 2 library.
+
+You can build it either using the Meson build tool (see `README.meson`
+for  more details),  or  using GNU  Make,  following the  instructions
+below.
+
+WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING
+
+  The Makefile contained in this  directory assume that the FreeType 2
+  library sources are located in `../freetype`.  If you downloaded one
+  of the stable  FreeType 2 source packages from our  server, you most
+  probably have to rename its directory, for example:
+
+    mv freetype-2.12.1 freetype       on Unix
+    rename freetype-2.12.1 freetype   on Windows
+
+WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING
+
+
+  First compile the FreeType 2 library, then say `make`.  However, you
+  must rename  the directory of  the FreeType 2 library  to `freetype`
+  (or create a symlink) before doing this.
+
+  Note  that  the  demonstration  programs  include  a  tiny  graphics
+  sub-system that includes 'drivers' to display Windows on Win32, X11,
+  BeOS, Mac, and  OS/2.  The build system  should automatically detect
+  which driver to use based on the current platform.
+
+  UNIX USERS
+  ==========
+
+    X11 issues
+    ----------
+
+    When building the  demos, the build system tries to  detect X11 by
+    using pkg-config.   If X11 is  not found, some demo  programs will
+    not be able to display graphics and will fail.
+
+    Users with  X11 installed in  a non-standard location  can specify
+    the paths  to the development  headers and library by  passing the
+    X11_CFLAGS and X11_LIBS variables on the command line.
+
+    If you  don't have X11  at all, fix  the definition of  the `EXES`
+    variable as described in the top-level Makefile.
+
+    Recent versions of Mac OS X  no longer deliver X11 by default; you
+    have  to  install 'XQuartz'  or  'xorg-server'  (the successor  of
+    XQuartz).   Those  bundles  are  provided  by  distributions  like
+    MacPorts or homebrew.
+
+
+    Using a different build directory
+    ---------------------------------
+
+    If the `configure` script of the  FreeType 2 library is run from a
+    separate build directory, it creates  a dummy `Makefile` file that
+    sets some variables before including the top-level Makefile of the
+    source directory.   This dummy Makefile  can also be used  for the
+    'ft2demos' package to be compiled in a different build directory:
+
+       make FT2DEMOS=1 -f /path/to/freetype/build-dir/Makefile
+
+    If necessary, adapt  the `TOP_DIR_2` variable to make  it point to
+    the 'ft2demos' source directory.
+
+--- end of README ---

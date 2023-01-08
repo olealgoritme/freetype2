@@ -1,0 +1,124 @@
+The FreeType  2 demo programs  can now be  built with the  Meson build
+system (https://mesonbuild.com).
+
+
+Requirements
+------------
+
+The Meson build  tool and its dependencies must be  installed, as well
+as a C and a C++ compiler.
+
+If  Qt5  development  libraries  are available  on  your  system,  the
+`ftinspect` program  is compiled and  linked against them,  or ignored
+otherwise.
+
+A FreeType 2 source repository is always required to build some of the
+test programs, because they depend  on internal headers of the library
+(e.g., `ttdebug`).
+
+By default, the first run of  `meson setup <builddir>` clones the HEAD
+revision of FreeType's git repository under `subprojects/freetype2`.
+
+However, you  can use any  other revision if  you follow one  of these
+methods *before* running `meson setup`:
+
+  - Modify the  contents of  `subprojects/freetype2.wrap` to  point to
+    your chosen URL and/or revision.
+
+  - Alternatively,  create or  replace `subprojects/freetype2`  with a
+    symlink to or a copy of the FreeType2 source tree of your chosing.
+
+In case meson  cloned FreeType already, and new commits were added  to
+its git repository, say
+
+  meson subprojects update
+
+to update it.
+
+
+Quick compilation instructions
+------------------------------
+
+  # Set  up  build  directory  named  'build',  and  optionally  clone
+  # the FreeType 2 source repository, as explained above.
+
+  meson setup build
+
+  # Compile all demo programs
+  #
+  # You should  be able to be  able to run all  programs directly from
+  # the `build/` directory.
+
+  meson compile -C build
+
+The binaries can  then be found in in the  `build` subdirectory except
+`ftinspect`, which is put into `build/src/ftinspect`.
+
+
+Installation with `meson install`
+---------------------------------
+
+Please keep in mind that the  FreeType 2 demo programs are mostly used
+to develop  and debug FreeType;  it is  thus rather unlikely  that you
+want  to  install  them  on your  system.   Nevertheless,  the  `meson
+install` command works, with a big  caveat: it installs the FreeType 2
+headers, libraries, and configuration files as well.
+
+This  is  the  default  behaviour  for `meson  install`,  and  can  be
+undesirable.  Fortunately,  Meson version 0.58 and  above supports the
+`--skip-subprojects` option to override this; see
+
+  https://mesonbuild.com/Release-notes-for-0-58-0.html#skip-subprojects-installation
+
+A clean  build followed by an  installation using Meson 0.58  or above
+looks like the following.
+
+  # Set up compilation to build and install the stripped demo programs
+  # to the `/opt` directory, instead of the default (which would be
+  # `/usr/local` on Linux).
+  #
+  # Note the extra options set here:
+  #
+  # * `strip=true` ensures that the installed binaries don't contain
+  #   debug symbols.
+  # * `buildtype=release` ensures that the binaries are fully
+  #   optimized.
+
+  meson setup build -Dstrip=true -Dbuildtype=release --prefix=/opt
+  meson install -C build --skip-subprojects
+
+For older Meson  releases, simply do not  use `--skip-subprojects` and
+remove the extra files manually.   For example, assuming that FreeType
+was *not* already installed under `/opt`, one could do
+
+  meson setup build -Dstrip=true -Dbuildtype=release --prefix=/opt
+  meson install -C build
+  rm /opt/lib/x86_64-linux-gnu/libfreetype.a
+  rm /opt/lib/x86_64-linux-gnu/pkgconfig/freetype2.pc
+  rm -rf /opt/include/freetype2
+
+The `x86_64-linux-gnu` part  varies depending on the host  OS and used
+architecure.
+
+Note  that  by default  all  binaries  are  statically linked  to  the
+FreeType library, which is useful for debugging.  It also ensures that
+the  programs  always use  the  exact  FreeType  2 version  they  were
+compiled against  at runtime  (which could be  broken if  your library
+search path is not set correctly).
+
+It is possible  to build and link against the  shared library instead,
+by adding the `-Dfreetype2:default_library=shared` option, as in
+
+  meson setup build \
+    -Dstrip=true \
+    -Dbuildtype=release \
+    -Dfreetype2:default_library=shared \
+    --prefix=/opt \
+  meson install -C build --skip-subprojects
+
+Note that `--skip-subprojects` prevents installation of the FreeType 2
+shared library  to the destination  directory.  Do  not use it  if you
+want to  install the  library as  well (along  its headers  and config
+files).
+
+--- end of README.meson ---

@@ -1,0 +1,6 @@
+[wrap-git]
+url = https://gitlab.freedesktop.org/freetype/freetype.git
+revision = HEAD
+
+[provide]
+freetype2 = freetype_dep

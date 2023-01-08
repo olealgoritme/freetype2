@@ -1,0 +1,1 @@
+/home/xuw/src/freetype2/trunk/freetype-2.12.1.tar.xz.sig

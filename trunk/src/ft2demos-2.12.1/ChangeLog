@@ -1,0 +1,560 @@
+2022-05-01  Werner Lemberg  <wl@gnu.org>
+
+	* Version 2.12.1 released.
+	==========================
+
+	Tag sources with 'VER-2-12-1'.
+
+	* README: Updated.
+	* meson.build: Updated.
+	* man/*.1: Updated.
+
+2022-04-09  Charlie Jiang  <w@chariri.moe>
+
+	[windows] Fix IME freezing window, don't filter messages by HWND
+
+	* graph/win32/grwin32.c (Window_ThreadProc): Remove HWND filter of GetMessage call
+
+2022-04-08  Charlie Jiang  <w@chariri.moe>
+
+	[windows] Fix some GUI keys not working
+
+	* graph/win32/grwin32.c (gr_win32_surface_listen_event, Message_Process): Switch to custom Windows messaage ID.
+
+2022-03-31  Werner Lemberg  <wl@gnu.org>
+
+	* Version 2.12.0 released.
+	==========================
+
+	Tag sources with 'VER-2-12-0'.
+
+	* README: Updated.
+	* meson.build: Updated.
+	* man/*.1: Updated.
+
+	* Makefile (dist): Generate `ChangeLog` entries for all commits since
+	version 2.11.0 (when we stopped creating this file manually).
+
+2022-03-31  Werner Lemberg  <wl@gnu.org>
+
+	Fix clang++ warnings.
+
+	* src/ftsdf.c (event_font_update, write_header, draw), src/rsvg-port.c
+	(rsvg_port_preset_slot): Add or remove casts.
+
+2022-03-24  Anuj Verma  <anuj@womp.xyz>
+
+	[ftsdf] Fix segmentation fault.
+
+	* src/ftsdf.c (draw): Use integer to avoid overflow while reverse
+	looping `j`.
+
+2022-02-19  Werner Lemberg  <wl@gnu.org>
+
+	*/*: Replace header macros with file names.
+
+	We already did the same some time ago in the FreeTye library.
+
+	Also remove redundant inclusion of some header macros.
+
+2022-02-19  Ben Wagner  <bungeman@chromium.org>
+
+	[ftview] Handle foreground COLR.
+
+	* src/ftview.c (Render_All): handle 0xFFFF `layer_color_idx` without
+	crashing.
+
+2022-02-11  Werner Lemberg  <wl@gnu.org>
+
+	[ftdump] Emit PS dictionary info for option `-n` if available.
+
+	* src/ftdump.c: Include `FT_TYPE1_TABLES_H`.
+	(Print_Array): New function.
+	(Print_FontInfo_Dictionary, Print_FontPrivate_Dictionary): New functions.
+	(main): Use them.
+	(usage): Updated.
+
+2022-02-06  Alexei Podtelezhnikov  <apodtele@gmail.com>
+
+	[builds/windows] Add `rsvg` port to project files.
+
+	* builds/windows/msvc/ftgamma.vcxproj: Updated.
+	* builds/windows/msvc/ftgrid.vcxproj: Updated.
+	* builds/windows/msvc/ftstring.vcxproj: Updated.
+	* builds/windows/msvc/ftview.vcxproj: Updated.
+
+2022-02-05  Alexei Podtelezhnikov  <apodtele@gmail.com>
+
+	[ftgrid] Minor tweaks.
+
+	* src/ftgrid.c (scale_bitmap): Take the buffer immediately.
+	(DO_BITMAP): Minor.
+	* src/ftcommon.c (FTDemo_Glyph_To_Bitmap): Clarify ownership.
+
+2022-02-05  Alexei Podtelezhnikov  <apodtele@gmail.com>
+
+	* src/ftgrid.c (bitmap_scale): Implement BGRA scaling.
+
+2022-02-05  Alexei Podtelezhnikov  <apodtele@gmail.com>
+
+	[ftgrid] Implement embedded bitmap toggle.
+
+	* src/ftgrid.c (grid_status_draw_outline): Undo the last change.
+	(Process_Event): Implement the embedded bitmap toggle and shift
+	some other toggle keys for consistency.
+	(event_help, main): Updated.
+
+2022-02-01  Werner Lemberg  <wl@gnu.org>
+
+	src/ftgrid.c (grid_status_draw_outline): Enable embedded bitmaps.
+
+	Previously, bitmap-only fonts were displayed but bitmap strikes were not.
+
+2022-01-30  Werner Lemberg  <wl@gnu.org>
+
+	src/ftinspect/ftinspect.pro (PKGCONFIG, LIBS): Add 'librsvg'.
+
+2022-01-28  Werner Lemberg  <wl@gnu.org>
+
+	* meson.build: We need 'librsvg' version 2.46.0 or newer.
+
+	Older versions don't have function `rsvg_handle_get_intrinsic_dimensions`.
+
+2022-01-26  Werner Lemberg  <wl@gnu.org>
+
+	* meson.build: Fix typo.
+
+2022-01-25  Werner Lemberg  <wl@gnu.org>
+
+	Use 'librsvg' conditionally.
+
+	* src/ftcommon.c, src/rsvg-port.c: Guard SVG code with `HAVE_LIBRSVG`.
+
+2022-01-23  Werner Lemberg  <wl@gnu.org>
+
+	* src/ftcommon.c (FTDemo_New): Update to recent FreeType change.
+
+2022-01-23  Alexei Podtelezhnikov  <apodtele@gmail.com>
+
+	[graph] Reshuffle some headers.
+
+	* graph/grobjs.c, graph/grobjs.h, graph/win32/grwin32.c: Updated.
+
+2022-01-20  Moazin Khatti  <moazinkhatri@gmail.com>
+
+	Prototype SVG support.
+
+	* src/rsvg-port.c, src/rsvg-port.h: New files, providing SVG rendering hooks
+	using the 'librsvg' library.
+
+	* src/ftcommon.c: Include `FT_OTSVG_H` and `rsvg-port.h`.
+	(FTDemo_New): Set SVG renderer hooks.
+	(FTDemo_Glyph_To_Bitmap): Also accept SVG glyph format.
+
+	* Makefile: Update for recent FreeType changes; the library's `configure`
+	script now tests for 'librsvg'.
+	(COMPILE): Updated to use `FT_DEMO_CFLAGS` for normal compilation, and
+	manually adding flags for 'librsvg' otherwise.
+	Update all users.
+	(LINK_LIBS): Updated to use `FT_DEMO_LDFLAGS` for normal compilation, and
+	manually adding flags for 'librsvg' otherwise.
+	(COMMON_OBJ): Updated
+	(rsvg-port): New rule.
+
+	* meson.build (librsvg_dep): New dependency.
+	(ftcommon_lib): Add `rsvg-port.*` files and update dependencies.
+
+2022-01-16  Alexei Podtelezhnikov  <apodtele@gmail.com>
+
+	[graph/win32] Fix up the key event handling.
+
+	* graph/win32/grwin32.c (key_translators): Do not translate the keys
+	that Windows translates.  We used to by-pass the system.
+	(gr_win32_surface_listen_event): Move custom translations from here...
+	(Message_Process): ... to here, which reduces the message posting.
+
+2022-01-12  Alexei Podtelezhnikov  <apodtele@gmail.com>
+
+	[ftgrid] Use lighter gridlines to improve readability.
+
+	* src/ftgrid.c (grid_status_colors, grid_status_alt_colors): Updated.
+
+2022-01-11  Alexei Podtelezhnikov  <apodtele@gmail.com>
+
+	* src/ftgrid.c (write_header): Show page with glyph number or code.
+
+2022-01-11  Werner Lemberg  <wl@gnu.org>
+
+	Update all copyright notices.
+
+2022-01-11  Werner Lemberg  <wl@gnu.org>
+
+	* subprojects/libpng.wrap, subprojects/zlip.wrap: Update from upstream.
+
+2022-01-09  Alexei Podtelezhnikov  <apodtele@gmail.com>
+
+	* graph/gblblit.c (gblender_blit_init): Remove double dereferencing.
+
+2022-01-08  Alexei Podtelezhnikov  <apodtele@gmail.com>
+
+	[graph] Fix negative pitch issues.
+
+	Some cropping issues were identified by forcing unusual negative
+	pitch in glyphs.  This fixes those issues and removes some unused
+	fields.
+
+	* graph/gblblit.c (GBlenderBlitRec): Remove unused fields.
+	* graph/gblblit.c (graph/gblblit.c): Revise negative pitch code.
+	* graph/gblender.h (gblender_dump_stats): Remove macro semicolon.
+
+2022-01-07  Werner Lemberg  <wl@gnu.org>
+
+	* src/ftcommon.c (icon_span): Fix undefined left-shift behaviour.
+
+2022-01-07  Werner Lemberg  <wl@gnu.org>
+
+	graph/grobjs.c (grFindColor): Fix undefined left-shift behaviour.
+
+2022-01-01  Alexei Podtelezhnikov  <apodtele@gmail.com>
+
+	[graph/win32] Consolidate resizing calls.
+
+	Suggested by Dmitry Timoshkov.
+
+	* graph/win32/grwin32.c (gr_win32_surface_listen_event): Purge
+	obsolete WM_RESIZE.
+
+2021-12-31  Alexei Podtelezhnikov  <apodtele@gmail.com>
+
+	* graph/win32/grwin32.c: Logging and formatting clean-ups.
+
+2021-12-31  Alexei Podtelezhnikov  <apodtele@gmail.com>
+
+	[graph/win32] Implement smooth resizing.
+
+	The window creation and the message loop has to be put in a separate
+	thread in order to achieve smooth resizing.  Othrewise, the modal
+	loop cannot be interrupted to redraw the canvas.  The main thread
+	also has a loop to receive the reposted messages, to update the
+	canvas and send WM_PAINT back via UpdateWindow.  After this update
+	the win32 resizing feels similar to the X11 resizing.
+
+	* graph/win32/grwin32.c (grWin32Surface): Store the host thread id.
+	(gr_win32_surface_init): Spin off `CreateWindow` from here...
+	(Window_ThreadProc): ... to here and run the window message loop.
+	(Message_Process): Updated to repost messages to the host thread.
+	(gr_win32_surface_listen_event): Run the host thread message loop.
+
+2021-12-31  Alexei Podtelezhnikov  <apodtele@gmail.com>
+
+	* graph/win32/grwin32.c (gr_win32_surface_init): Check allocations.
+
+2021-12-31  Alexei Podtelezhnikov  <apodtele@gmail.com>
+
+	* src/ftcommon.c (FTDemo_Done): Flush stdout for mintty.
+
+2021-12-31  Alexei Podtelezhnikov  <apodtele@gmail.com>
+
+	[graph/win32] Improve surface initialization.
+
+	* graph/win32/grwin32.c (gr_win32_surface_init): Allocate bitmaps by
+	calling `gr_win32_surface_resize`.
+
+2021-12-11  Ben Wagner  <bungeman@chromium.org>
+
+	[ftbench] Free stroker when done.
+
+	LeakSanitizer reported that the stroker object was being leaked.
+	Properly free it with FT_Stroker_Done. (!14)
+
+	* src/ftbench.c (test_stroke): Free stroker.
+
+2021-12-02  Werner Lemberg  <wl@gnu.org>
+
+	* Version 2.11.1 released.
+	==========================
+
+	Tag sources with 'VER-2-11-1'.
+
+	* README: Updated.
+	* meson.build: Updated.
+	* man/*.1: Updated.
+
+	* ChangeLog: Renamed to ...
+	* ChangeLog.old: ... this.
+
+	* Makefile (version_tag, CHANGELOG_SCRIPT): New variables.
+	(dist): Generate `ChangeLog` file with all commits since last release.
+
+2021-11-30  Alexei Podtelezhnikov  <apodtele@gmail.com>
+
+	[graph] Minor clean-ups.
+
+	* graph/gblender.c (gblender_reset_key): Remove unnecessary masks.
+	* graph/gblany.h (*vrgb*, *vbgr*): Remove redundant casts.
+
+2021-11-25  Alexei Podtelezhnikov  <apodtele@gmail.com>
+
+	* graph/gblblit.c (gblender_blit_init): Remove dummy fallback.
+
+2021-11-24  Alexei Podtelezhnikov  <apodtele@gmail.com>
+
+	* graph/*.*: Remove legacy blitter ghosts.
+
+2021-11-24  Alexei Podtelezhnikov  <apodtele@gmail.com>
+
+	[graph] Revise function arguments.
+
+	* graph/gblblit.c (grSetTargetGamma, grSetTargetPenBrush): Input
+	surface instead of bitmap as more appropriate.
+	* graph/graph.h (grSetTargetGamma, grSetTargetPenBrush): Update
+	decarations.
+	* graph/grdevice.c, src/ftcommon.c, src/ftdiff.c: Update callers.
+
+2021-11-22  Werner Lemberg  <wl@gnu.org>
+
+	Whitespace, typos, other minor issues.
+
+2021-11-22  Alexei Podtelezhnikov  <apodtele@gmail.com>
+
+	[ftview] Show empty charmaps if error, including UVS.
+
+	* src/ftcommon.c (get_last_char): Call `FT_Set_Charmap` and handle
+	its errors effectively setting `num_indices` to 0.
+	* src/ftview.c (event_index_change, event_encoding_change): Updated.
+
+2021-11-22  Alexei Podtelezhnikov  <apodtele@gmail.com>
+
+	* src/ftdump.c (Print_Charmaps): Do not iterate UVS charmaps.
+
+2021-11-20  Werner Lemberg  <wl@gnu.org>
+
+	* graph/*: Fix clang compilation warnings.
+
+	Add casts for signed vs. unsigned issues.
+
+2021-11-20  Alexei Podtelezhnikov  <apodtele@gmail.com>
+
+	[ftview] Report the last shown index or charcode.
+
+	Together with the index or charcode limit, it gives a sense of the
+	portion of the font under review.  This is reported at the bottom-
+	left corner.
+
+	* src/ftview.c (main): Pass the last shown index instead of error.
+	(Render_*): Return the last shown index, charcode, or -1.
+	(write_header): Receive and display the last shown index or charcode.
+
+2021-11-18  Alexei Podtelezhnikov  <apodtele@gmail.com>
+
+	* src/ftcommon.c (get_last_char): Speed up sparse convergence.
+
+2021-11-17  Alexei Podtelezhnikov  <apodtele@gmail.com>
+
+	[ftview] Report the last available index or charcode.
+
+	* src/ftcommon.c (get_last_char): Implement the binary search for
+	the last charcode using `FT_Get_Next_Char`.
+	(FTDemo_Set_Current_Font): Set the number of indices accordingly.
+	* src/ftview.c (write_header): Display the last charcode or index.
+
+2021-11-17  Alexei Podtelezhnikov  <apodtele@gmail.com>
+
+	[graph] Complete removal of legacy blitter.
+
+	This switches the remaing monochrome rendering of headers to the main
+	blender and deletes the legacy blitter. The old blitter can handle
+	exotic target surfaces like monochrome or 4-bit bitmaps. Anything
+	beyond the alpha blender can do.
+
+	* graph/grfont.c (grWriteCellChar, grWriteCellString): Switch from
+	`grBlitGlyphToBitmap` to `grBlitGlyphToSurface`.
+	* graph/grblit.[ch]: Delete files.
+	* graph/graph.h, graph/grconfig.h: Remove references.
+	* graph/rules.mk, graph/meson.build, vms_make.com,
+	builds/windows/msvc/migs.vcxproj: Update build scripts.
+
+2021-11-15  Werner Lemberg  <wl@gnu.org>
+
+	* src/*: Fix clang warnings.
+
+	All of them are minor and belong to one of the following categories:
+
+	* signedness casts
+	* corrected `printf` signatures
+	* missing `static` keyword for local functions
+
+2021-11-15  Werner Lemberg  <wl@gnu.org>
+
+	[ftbench] Fix clang warnings.
+
+	* src/ftbench.c (first_index, last_index): Make these two global variables
+	signed, to be of the same type as `incr_index` (which can be positive or
+	negative).
+	Update all related code.
+
+2021-11-15  Alexei Podtelezhnikov  <apodtele@gmail.com>
+
+	* graph/win32/grwin32.c (gr_win32_surface_set_icon): Add background.
+
+2021-11-15  Alexei Podtelezhnikov  <apodtele@gmail.com>
+
+	Minor.
+
+2021-11-12  Alexei Podtelezhnikov  <apodtele@gmail.com>
+
+	[builds/windows] Use `props` to share dependencies.
+
+	Merges !12 from @ubawurinna.
+
+	* builds/windows/msvc/ft2demos.props: Consolidate FreeType dependencies.
+	* builds/windows/msvc/*.vcxproj: Updated.
+
+2021-10-31  Alexei Podtelezhnikov  <apodtele@gmail.com>
+
+	[builds/windows] New project and solution files.
+
+	These files can be used to build selected FreeType demo programs
+	using Microsoft Visual C++. FreeType should be compiled in the
+	parallel folder with freetype.lib available in freetype\objs\
+	for compilation.  The executables will be delivered into
+	freetype-demos\bin\ and expect freetype.dll there as well.
+
+	* builds/windows/msvc/ft2demos.sln: Solution file.
+	* builds/windows/msvc/*.vcxproj: Project files.
+
+2021-10-26  Alexei Podtelezhnikov  <apodtele@gmail.com>
+
+	* Makefile: Remove obsolete rule.
+
+2021-10-26  Alexei Podtelezhnikov  <apodtele@gmail.com>
+
+	* Makefile: Reduce FT2_BUILD_FREETYPE usage
+
+	Public macro FT_FACE_DRIVER_NAME utilized in d01c79af9838 makes
+	FT2_BUILD_LIBRARY unnecassary in most cases.
+
+	* src/ftinspect/ftinspect.pro: Ditto.
+
+2021-10-23  Alexei Podtelezhnikov  <apodtele@gmail.com>
+
+	* graph/grblit.c (grBlitClean): Fix warnings.
+
+2021-10-22  Alexei Podtelezhnikov  <apodtele@gmail.com>
+
+	* graph/grblit.c (grGetSaturation, grBlitClean): Dead fixes.
+
+2021-10-22  Alexei Podtelezhnikov  <apodtele@gmail.com>
+
+	Minor.
+
+2021-10-22  Alexei Podtelezhnikov  <apodtele@gmail.com>
+
+	* graph/grblit.c (grGetSaturation): Fix return value.
+
+2021-10-22  Alexei Podtelezhnikov  <apodtele@gmail.com>
+
+	[graph] Avoid unnecessary memory zeroing.
+
+	* graph/x11/grx11.c (gr_x11_surface_init): Call `malloc` explicitly.
+	* graph/grblit.c (grGetSaturation, grGetConversion): Call `malloc`
+	and `memset` explicitly even though this code is unused.
+
+2021-10-18  Alexei Podtelezhnikov  <apodtele@gmail.com>
+
+	* graph/grdevice.c (grWriteSurface{Char,String}): Use GR_FONT_SIZE.
+
+2021-10-18  Alexei Podtelezhnikov  <apodtele@gmail.com>
+
+	[graph] Do not zero a new bitmap.
+
+	The `grNewBitmap` function is mostly used to allocate and resize
+	canvas, which is shortly flooded with a background color.  There is
+	no need to zero it.
+
+	* graph/grobjs.c (grNewBitmap): Always call `realloc` directly,
+	which does not initialize the buffer.
+	* graph/grobjs.c (grNewBitmap): Update description.
+
+2021-10-13  Hugh McMaster  <hugh.mcmaster@outlook.com>
+
+	graph/x11/rules.mk: Use standard pkg-config variable naming
+
+2021-10-13  Hugh McMaster  <hugh.mcmaster@outlook.com>
+
+	graph/x11/rules.mk: Use pkg-config to find the X11 headers and library
+
+2021-10-07  Alexei Podtelezhnikov  <apodtele@gmail.com>
+
+	* src/ftinspect/engine/engine.cpp: Include FT_MODULE_H.
+
+	Fixes #2.
+
+2021-10-05  Jouk Jansen  <joukj@hrem.stm.tudelft.nl>
+
+	* vms_make.com: Updated to include more demos.
+
+2021-10-03  Alexei Podtelezhnikov  <apodtele@gmail.com>
+
+	Synchronize with FreeType.
+
+	* src/ftcommon.c (FTDemo_Hinting_Engine_Change, FTDemo_Get_Info):
+	Use new public `FT_FACE_DRIVER_NAME` macro.
+	* src/ftdump.c (Print_Type): Ditto.
+	* src/ftdiff.c (process_event, render_state_draw): Ditto.
+	* src/ftinspect/engine/engine.cpp (loadFont): Ditto.
+
+2021-10-01  Jouk Jansen  <joukj@hrem.stm.tudelft.nl>
+
+	* graph/grtypes.h [__VMS]: Accomodate non-compliant C99.
+
+2021-10-01  Alexei Podtelezhnikov  <apodtele@gmail.com>
+
+	* graph/win32/grwin32.c (gr_win32_device_init): Use neutral background.
+
+2021-09-30  Jouk Jansen  <joukj@hrem.stm.tudelft.nl>
+
+	* vms_make.com, src/mlgetopt.h [VMS]: Updated.
+
+2021-09-30  Alexei Podtelezhnikov  <apodtele@gmail.com>
+
+	* graph/grtypes.h: Don't give up on <stdint.h>.
+
+2021-09-16  Alexei Podtelezhnikov  <apodtele@gmail.com>
+
+	* src/ftdump.c (Print_Name): Reformat font revision.
+
+2021-09-10  Alexei Podtelezhnikov  <apodtele@gmail.com>
+
+	* src/ftdump.c (Print_Name): Ignore negative pre-epoch time.
+
+2021-09-09  Alexei Podtelezhnikov  <apodtele@gmail.com>
+
+	* src/ftdump.c (Print_Name): Avoid negative pre-epoch time.
+
+2021-09-09  Alexei Podtelezhnikov  <apodtele@gmail.com>
+
+	* src/ftdump.c (Print_Programs, Print_Glyfs): Handle no-data glyphs.
+
+2021-09-09  Alexei Podtelezhnikov  <apodtele@gmail.com>
+
+	* src/ftdump.c (Print_Programs, Print_Glyfs): Generalize messages.
+
+2021-08-26  Alexei Podtelezhnikov  <apodtele@gmail.com>
+
+	[ftstring] Loop through a custom string if present.
+
+	* src/ftstring.c (Sample): Use the initial pointer for a custom string.
+	(parse_cmdline): Assing the pointer here if any.
+	(event_text_change): Loop through the pointer if set.
+	(main): Minor tweak.
+
+2021-07-24  Werner Lemberg  <wl@gnu.org>
+
+	* meson.build: Build `ttdebug`.
+
+	Problem reported by Andreas Radke <andreas.radke@mailbox.org>.
+
+2021-07-24  Werner Lemberg  <wl@gnu.org>
+
+	* meson.build: Sort executable rules.

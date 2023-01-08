@@ -1,0 +1,1 @@
+/home/xuw/src/freetype2/trunk/freetype2.sh

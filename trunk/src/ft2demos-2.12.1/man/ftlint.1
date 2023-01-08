@@ -1,0 +1,80 @@
+.TH FTLINT 1 "May 2022" "Freetype 2.12.1"
+.
+.
+.SH NAME
+.
+ftlint \- simple font tester
+.
+.
+.SH SYNOPSIS
+.
+.B ftlint
+.RI [ options ]
+.I ppem
+.IR font .\|.\|.
+.
+.
+.SH DESCRIPTION
+.
+.B ftlint
+opens the given font(s), loads and renders glyphs at the given ppem value.
+For successfully rendered glyphs, it calculates the bitmap MD5 checksum
+for regression testing as well as horizonal (X) and vertical (Y) acutances
+for quality assessment.  The acutance is equal to 2.0 for monochrome bitmap
+fonts and approaches this value for hinted anti-aliased fonts.
+.
+.TP
+.B ppem
+Size in pixels per EM.
+.
+.TP
+.B font
+The font file(s) to test.
+.
+.PP
+This program is part of the FreeType demos package.
+.
+.
+.SH OPTIONS
+.
+.TP
+.BI \-f \ L
+Use
+.B hexadecimal
+(not decimal) number
+.I L
+defined by
+.B \%FT_\:LOAD_\:XXX
+flags (default is 0).
+.
+.TP
+.BI \-r \ N
+Set render mode to
+.IR N :
+.
+.RS
+.TS
+tab (@);
+rB l.
+0@normal
+1@light
+2@mono
+3@horizontal LCD
+4@vertical LCD
+.TE
+.RE
+.
+.IP
+which corresponds to the values of the
+.B \%FT_\:RENDER_\:MODE_\:XXX
+enumeration (default is 0).
+.
+.TP
+.BI \-i \ I-J
+Range of glyph indices to use (default: all).
+.
+.TP
+.B \-q
+Quiet mode without the rendering analysis.
+.
+.\" eof
