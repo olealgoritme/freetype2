@@ -310,9 +310,9 @@
                            FT_LcdFilter  filter )
   {
     static const FT_LcdFiveTapFilter  default_weights =
-                   { 0x10, 0x40, 0x70, 0x40, 0x10 };
+                   { 0x08, 0x4d, 0x56, 0x4d, 0x08 };
     static const FT_LcdFiveTapFilter  light_weights =
-                   { 0x10, 0x40, 0x70, 0x40, 0x10 };
+                   { 0x00, 0x55, 0x56, 0x55, 0x00 };
 
 
     if ( !library )
