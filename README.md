@@ -1,8 +1,10 @@
 # FreeType2 Font Rendering for QD-OLED @ arch linux
 
+
 - For my Samsung G8 OLED monitor
 - Disabled ClearType Sub pixel font rendering
 - Uses custom pixel layout (x/y) -18, -11, 2, 22, 16, -11
+
 
 - Replace the default freetype2 package
 ```
@@ -12,19 +14,21 @@ sudo pacman --remove --nodeps freetype2
 sudo pacman --upgrade freetype2-2.12.1-1-x86_64.pkg.tar.zst
 ```
 
-- Other settings
-Disable gtk4 font hinting in ~/.config/gtk-4.0/settings.ini
+
+- Disable gtk4 font hinting in ~/.config/gtk-4.0/settings.ini
 ```
 [Settings]
 gtk-hint-font-metrics=0
 ```
 
-Set truetype interpreter version to v40 in /etc/profile.d/freetype2.sh
+
+- Set truetype interpreter version to v40 in /etc/profile.d/freetype2.sh
 ```
 export FREETYPE_PROPERTIES="truetype:interpreter-version=40"
 ```
 
-Set Font config in /etc/fonts/local.conf
+
+- Set Font config in /etc/fonts/local.conf
 ```
 <fontconfig>
     <match target="font">
@@ -57,4 +61,6 @@ Set Font config in /etc/fonts/local.conf
     </match>
 </fontconfig>
 ```
-- reboot or restart X11
+
+
+- Reboot or restart X11
