@@ -12,4 +12,11 @@ sudo pacman --remove --nodeps freetype2
 sudo pacman --upgrade freetype2-2.12.1-1-x86_64.pkg.tar.zst
 ```
 
+- Possible conflicts
+```
+vim ~/.config/gtk-4.0/settings.ini
+[Settings]
+gtk-hint-font-metrics=0
+```
+
 - reboot or restart X11
