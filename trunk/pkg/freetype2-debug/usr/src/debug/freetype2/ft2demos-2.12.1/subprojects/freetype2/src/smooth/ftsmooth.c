@@ -100,6 +100,9 @@
     sub[2].x = 16;
     sub[2].y = -11;
 
+    /* set up LCD filtering */
+    //FT_Library_SetLcdFilter( render->root.library, FT_LCD_FILTER_NONE );
+
     render->clazz->raster_class->raster_reset( render->raster, NULL, 0 );
 
     return 0;
